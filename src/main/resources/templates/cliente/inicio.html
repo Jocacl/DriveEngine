@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="~{layout/fragmentos :: fCabecera}"></head>
+    <body class="sb-nav-fixed">
+        <nav th:replace="~{layout/fragmentos :: fBarraSuperior}"></nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav th:replace="~{layout/fragmentos :: fMenu}"></nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container my-4">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert" id="alertMensaje">
+                            <strong>Mensaje!</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div th:if="${eliminar != null}" class="alert alert-danger alert-dismissible fade show" role="alert" id="alertEliminar">
+                            <span th:text="${eliminar}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <form th:action="@{/cliente/guardar}" th:object="${cliente}" method="post" class="needs-validation" novalidate>
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4>Registro de Clientes</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>DNI:</label>
+                                            <input th:field="*{dni}" type="text" class="form-control" placeholder="Ingrese DNI" required/>
+                                            <div class="invalid-feedback">Por favor ingrese DNI.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Nombre del cliente:</label>
+                                            <input th:field="*{nombres}" type="text" class="form-control" placeholder="Ingrese nombre" required/>
+                                            <div class="invalid-feedback">Por favor ingrese el nombre del cliente.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Apellidos:</label>
+                                            <input th:field="*{apellidos}" type="text" class="form-control" placeholder="Ingrese Apellidos" required/>
+                                            <div class="invalid-feedback">Por favor ingrese Apellidos.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Celular:</label>
+                                            <input th:field="*{celular}" type="text" class="form-control" placeholder="Ingrese Celular" required/>
+                                            <div class="invalid-feedback">Por favor ingrese Celular.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Direccion:</label>
+                                            <input th:field="*{direccion}" type="text" class="form-control" placeholder="Ingrese Direccion" required/>
+                                            <div class="invalid-feedback">Por favor ingrese Direccion.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-12 text-center">
+                                            <button class="btn btn-dark" type="submit">
+                                                <i class="fa-regular fa-floppy-disk"></i> Registrar Cliente
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="card mt-5">
+                            <div class="card-header , text-center">
+                                <h4>Clientes Registrados</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>DNI</th>
+                                                <th>Nombre</th>
+                                                <th>Apellidos</th>
+                                                <th>Celular</th>
+                                                <th>Dirección</th>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${listaClientes}">
+                                                <td th:text="${item.dni}"></td>
+                                                <td th:text="${item.nombres}"></td>
+                                                <td th:text="${item.apellidos}"></td>
+                                                <td th:text="${item.celular}"></td>
+                                                <td th:text="${item.direccion}"></td>
+                                                <td class="text-center">
+                                                    <a href="#" class="btn btn-warning editarCliente"
+                                                    th:data-id="${item.id}"
+                                                    th:data-dni="${item.dni}"
+                                                    th:data-nombres="${item.nombres}"
+                                                    th:data-apellidos="${item.apellidos}"
+                                                    th:data-celular="${item.celular}"
+                                                    th:data-direccion="${item.direccion}">
+                                                        <i class="fa-regular fa-pen-to-square">Editar</i>
+                                                    </a>
+                                                <td>
+                                                <td class="text-center">
+                                                    <a th:href="@{/cliente/eliminar/} + ${item.id}" class="btn btn-danger" 
+                                                        onclick="return confirm('¿Desea eliminar el cliente?')">
+                                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                                    </a>                                               
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+                <footer th:replace="~{layout/fragmentos :: fFooter}"></footer>
+            </div>
+        </div>
+
+        <form th:action="@{/cliente/guardar}" th:object="${cliente}" method="post">
+            <!-- Modal -->
+            <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Cliente</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" th:field="*{id}">
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label>DNI:</label>
+                                    <input name="dni" id="txtdni" type="text" class="form-control" placeholder="Ingrese dni"/> 
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label>Nombres:</label>
+                                    <input name="nombres" id="txtNombres" type="text" class="form-control" placeholder="Ingrese nombres"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label>Apellidos:</label>
+                                    <input name="apellidos" id="txtApellidos" type="text" class="form-control" placeholder="Ingrese apellidos"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label>Celular:</label>
+                                    <input name="celular" id="txtcelular" type="text" class="form-control" placeholder="Ingrese celular"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label>Dirección:</label>
+                                    <input name="direccion" id="txtdireccion" type="text" class="form-control" placeholder="Ingrese direccion"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-regular fa-floppy-disk"></i> Guardar Cambios
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+        <div th:replace="~{layout/fragmentos :: fLibrerias}"></div>
+        <script th:src="@{/js/carrera.js}"></script>
+        <script th:src="@{/js/validar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/cliente.js}"></script>
+    </body>
+</html>

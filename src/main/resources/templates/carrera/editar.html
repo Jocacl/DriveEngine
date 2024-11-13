@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="~{layout/fragmentos :: fCabecera}"></head>
+    <body class="sb-nav-fixed">
+        <nav th:replace="~{layout/fragmentos :: fBarraSuperior}"></nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav th:replace="~{layout/fragmentos :: fMenu}"></nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container px-4">
+                        <form th:action="@{/carrera/guardar}" th:object="${carrera}" method="post" class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}"/>
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h4>Editar Carrera</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Nombre de la carrera:</label>
+                                            <input th:field="*{nombre}" type="text" class="form-control" placeholder="Ingrese nombre de la carrera a editar" required/>
+                                            <div class="invalid-feedback">Por favor ingrese el nombre de la carrera.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Facultad:</label>
+                                            <input th:field="*{facultad}" type="text" class="form-control" placeholder="Ingrese nombre de la facultad a editar" required/>
+                                            <div class="invalid-feedback">Por favor ingrese la facultad.</div>
+                                            <div class="valid-feedback">Todo Correcto</div>
+                                        </div>
+                                    </div>                                      
+                                    <div class="row mt-4">
+                                        <div class="col-12 text-center">
+                                            <a th:href="@{/carrera/}" class="btn btn-secondary">
+                                                <i class="fa-solid fa-ban"></i> cancelar
+                                            </a>
+                                            <button class="btn btn-dark" type="submit">
+                                                <i class="fa-regular fa-floppy-disk"></i> Actualizar carrera
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </main>
+                <footer th:replace="~{layout/fragmentos :: fFooter}"></footer>
+            </div>
+        </div>
+        <div th:replace="~{layout/fragmentos :: fLibrerias}"></div>
+        <script th:src="@{/js/validar.js}"></script>
+    </body>
+</html>
